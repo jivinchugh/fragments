@@ -11,5 +11,8 @@
     "url": "https://github.com/jivinchugh/fragments.git"
   },
   "author": "Jivin Chugh",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "prettier": "3.3.3"
+  }
 }
