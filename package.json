@@ -8,7 +8,7 @@
     "lint": "eslint \"./src/**/*.js\"",
     "start": "node src/server.js",
     "dev": "cross-env LOG_LEVEL=debug nodemon ./src/server.js --watch src",
-    "debug": "LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/server.js --watch src"
+    "debug": "cross-env LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/server.js --watch src"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,7 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "cross-env": "^7.0.3",
     "eslint": "^9.9.1",
     "globals": "^15.9.0",
     "nodemon": "^3.1.4",
