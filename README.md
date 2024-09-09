@@ -23,7 +23,7 @@ Add a lint script to your package.json
  "lint": "eslint \"./src/\*_/_.js\""  
  },
 
-2. **PINO SETUP**
+2. **PINO SETUP**  
    Install by running the command  
    `npm install --save pino pino-pretty pino-http`
 
@@ -51,7 +51,7 @@ if (options.level === 'debug') {
 module.exports = require('pino')(options);
 ```
 
-3. **Server Startup Scripts**
+3. **Server Startup Scripts**  
    Add some npm scripts to package.json in order to automatically start our server. The start script runs our server normally; dev runs it via nodemon, which watches the src/\*\* folder for any changes, restarting the server whenever something is updated; debug is the same as dev but also starts the node inspector on port 9229, so that you can attach a debugger (e.g., VSCode):
 
 ```
