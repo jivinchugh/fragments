@@ -1,15 +1,12 @@
 {
-  "name": "fragments",
-  "private": true,
-  "version": "0.0.1",
-  "description": "Fragments back-end API",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jivinchugh/fragments"
-  },
-  "author": "Jivin Chugh",
-  "license": "UNLICENSED"
+  "files.eol": "\n",
+  "files.insertFinalNewline": true
 }
