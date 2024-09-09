@@ -69,8 +69,8 @@ module.exports = require('pino')(options);
 This project uses Pino for structured logging. The logger is configured in `src/logger.js` and logs all HTTP requests and server events in JSON format.
 
 **Project Structure**  
-src/: All source code goes here.  
-app.js: Initializes the Express server and middleware.  
-logger.js: Configures the Pino logger for structured logging.  
-server.js: Entry point of the server.  
-.vscode/: VSCode configuration files for debugging.
+*src/: All source code goes here.  
+*app.js: Initializes the Express server and middleware.  
+*logger.js: Configures the Pino logger for structured logging.  
+*server.js: Entry point of the server.  
+\*.vscode/: VSCode configuration files for debugging.
