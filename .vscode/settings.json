@@ -8,8 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/REPLACE-THIS-WITH-YOUR-GITHUB-USERNAME/fragments.git"
+    "url": "git+https://github.com/jivinchugh/fragments"
   },
-  "author": "REPLACE WITH YOUR NAME",
+  "author": "Jivin Chugh",
   "license": "UNLICENSED"
 }
