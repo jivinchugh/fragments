@@ -17,8 +17,36 @@
 Once done, to check if there is any issues, run  
  `npm audit fix`
 
-Add a lint script to your package.json
-"scripts": {
-"test": "echo \"Error: no test specified\" && exit 1",
-"lint": "eslint \"./src/\*_/_.js\""
-},
+Add a lint script to your package.json  
+"scripts": {  
+ "test": "echo \"Error: no test specified\" && exit 1",  
+ "lint": "eslint \"./src/\*_/_.js\""  
+ },
+
+2. **PINO SETUP**
+   Install by running the command  
+   `npm install --save pino pino-pretty pino-http`
+
+   then create and configure Pino Logger instance
+
+```
+// src/logger.js
+
+// Use `info` as our standard log level if not specified
+const options = { level: process.env.LOG_LEVEL || 'info' };
+
+// If we're doing `debug` logging, make the logs easier to read
+if (options.level === 'debug') {
+  // https://github.com/pinojs/pino-pretty
+  options.transport = {
+    target: 'pino-pretty',
+    options: {
+      colorize: true,
+    },
+  };
+}
+
+// Create and export a Pino Logger instance:
+// https://getpino.io/#/docs/api?id=logger
+module.exports = require('pino')(options);
+```
