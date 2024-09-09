@@ -50,3 +50,16 @@ if (options.level === 'debug') {
 // https://getpino.io/#/docs/api?id=logger
 module.exports = require('pino')(options);
 ```
+
+3. **Server Startup Scripts**
+   Add some npm scripts to package.json in order to automatically start our server. The start script runs our server normally; dev runs it via nodemon, which watches the src/\*\* folder for any changes, restarting the server whenever something is updated; debug is the same as dev but also starts the node inspector on port 9229, so that you can attach a debugger (e.g., VSCode):
+
+```
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "lint": "eslint \"./src/**/*.js\"",
+  "start": "node src/server.js",
+  "dev": "LOG_LEVEL=debug nodemon ./src/server.js --watch src",
+  "debug": "LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/server.js --watch src"
+},
+```
