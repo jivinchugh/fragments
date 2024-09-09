@@ -1,8 +1,8 @@
 # fragments
 
-1. How to run lint
-   npm init @eslint/config@latest
-   Need to install the following packages:
+1. How to run lint  
+   npm init @eslint/config@latest  
+   Need to install the following packages:  
    @eslint/create-config@1.3.1
 
 ✔ How would you like to use ESLint? · problems  
