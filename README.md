@@ -27,7 +27,7 @@ Add a lint script to your package.json
    Install by running the command  
    `npm install --save pino pino-pretty pino-http`
 
-   then create and configure Pino Logger instance
+   Then create and configure Pino Logger instance in `src/logger.js`
 
 ```
 // src/logger.js
