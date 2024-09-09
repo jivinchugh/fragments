@@ -59,7 +59,9 @@ module.exports = require('pino')(options);
   "test": "echo \"Error: no test specified\" && exit 1",
   "lint": "eslint \"./src/**/*.js\"",
   "start": "node src/server.js",
-  "dev": "LOG_LEVEL=debug nodemon ./src/server.js --watch src",
-  "debug": "LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/server.js --watch src"
+  "dev": "cross-env LOG_LEVEL=debug nodemon ./src/server.js --watch src",
+  "debug": "cross-env LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/server.js --watch src"
 },
 ```
+
+**Makesure, for windows, add "cross-env"**
