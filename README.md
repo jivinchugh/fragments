@@ -10,7 +10,6 @@
 ✔ Which framework does your project use? · none
 ✔ Does your project use TypeScript? · javascript
 ✔ Where does your code run? · node
-
 eslint, globals, @eslint/js
 ✔ Would you like to install them now? · No / Yes
 ✔ Which package manager do you want to use? · npm
