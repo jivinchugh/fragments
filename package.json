@@ -14,7 +14,7 @@
     "type": "git",
     "url": "https://github.com/jivinchugh/fragments.git"
   },
-  "author": "Jivin Chugh",
+  "author": "jivinchugh",
   "license": "UNLICENSED",
   "devDependencies": {
     "@eslint/js": "^9.9.1",
