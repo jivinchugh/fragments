@@ -27,7 +27,7 @@ const jwtVerifier = CognitoJwtVerifier.create({
 
 // At startup, download and cache the public keys (JWKS) we need in order to
 // verify our Cognito JWTs, see https://auth0.com/docs/secure/tokens/json-web-tokens/json-web-key-sets
-// You can try this yourself using:
+// try this yourself using:
 // curl https://cognito-idp.us-east-1.amazonaws.com/<user-pool-id>/.well-known/jwks.json
 jwtVerifier
   .hydrate()

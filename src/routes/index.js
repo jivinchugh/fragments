@@ -16,7 +16,6 @@ const { authenticate } = require('../auth');
 /**
  * Expose all of our API routes on /v1/* to include an API version.
  */
-//router.use(`/v1`, require('./api'));
 /**
  * Expose all of our API routes on /v1/* to include an API version.
  * Protect them all with middleware so you have to be authenticated
@@ -35,7 +34,6 @@ router.get('/', (req, res) => {
     createSuccessResponse({
       //status: 'ok',
       author,
-      // Use your own GitHub URL for this!
       githubUrl: 'https://github.com/jivinchugh/fragments.git',
       version,
     })
