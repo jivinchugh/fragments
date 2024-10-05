@@ -1,4 +1,4 @@
-# fragments
+# Fragments (backend)
 
 1. **How to run lint**  
    npm init @eslint/config@latest  
@@ -14,8 +14,11 @@
  ✔ Would you like to install them now? · No / Yes  
  ✔ Which package manager do you want to use? · npm
 
-Once done, to check if there is any issues, run  
- `npm audit fix`
+Once done, to check if there is any issues, run
+
+```
+npm audit fix
+```
 
 Add a lint script to your package.json  
 "scripts": {  
@@ -24,8 +27,11 @@ Add a lint script to your package.json
  },
 
 2. **PINO SETUP**  
-   Install by running the command  
-   `npm install --save pino pino-pretty pino-http`
+   Install by running the command
+
+   ```
+   npm install --save pino pino-pretty pino-http
+   ```
 
    Then create and configure Pino Logger instance in `src/logger.js`
 
