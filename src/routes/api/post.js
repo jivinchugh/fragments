@@ -3,7 +3,6 @@ const { Fragment } = require('../../model/fragment');
 const logger = require('../../logger');
 
 module.exports = async (req, res) => {
-  logger.debug('Post: ' + req.body);
   logger.info(`Received POST request from user ${req.user}`);
 
   // Ensure req.body is a Buffer
@@ -19,10 +18,8 @@ module.exports = async (req, res) => {
     logger.debug('Attempting to create a new fragment');
     const fragment = new Fragment({ ownerId, type: req.get('Content-Type') });
     await fragment.save();
-    logger.info(`Fragment metadata saved. ID: ${fragment.id}, Owner: ${ownerId}`);
     await fragment.setData(fragData);
-    logger.info(`Fragment data saved. ID: ${fragment.id}, Size: ${fragment.size} bytes`);
-
+    logger.info(`Fragment metadata and data saved. Owner: ${ownerId}, ID: ${fragment.id}, Size: ${fragment.size} bytes`);
     res.set('Content-Type', fragment.type);
     // Construct the Location URL using req.protocol and req.headers.host
     //const APIURL = process.env.API_URL;
