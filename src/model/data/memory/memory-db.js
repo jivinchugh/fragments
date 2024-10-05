@@ -24,6 +24,7 @@ class MemoryDB {
     }
 
     const db = this.db;
+    logger.debug(`THIS IS DB---------------------, ${JSON.stringify(db)}`)
     const value = db[primaryKey] && db[primaryKey][secondaryKey];
     if (value) {
       logger.info(`Value found for primaryKey=${primaryKey}, secondaryKey=${secondaryKey}`);
@@ -69,8 +70,6 @@ class MemoryDB {
       logger.error(`Invalid primaryKey: primaryKey=${primaryKey}`);
       throw new Error(`primaryKey string is required, got primaryKey=${primaryKey}`);
     }
-
-    // No matter what, we always return an array (even if empty)
     const db = this.db;
     const values = db[primaryKey] ? Object.values(db[primaryKey]) : [];
     logger.info(`Query for primaryKey=${primaryKey} returned ${values.length} values`);
