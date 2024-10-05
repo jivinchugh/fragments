@@ -59,11 +59,6 @@ class Fragment {
     logger.info(`Fetching fragments for ownerId=${ownerId}, expand=${expand}`);
     try {
       const fragments = await listFragments(ownerId, expand);
-      if (expand) {
-        logger.debug(`Expanded fragments for ownerId=${ownerId}`);
-        return fragments.map((fragment) => new Fragment(fragment));
-      }
-      logger.debug(`Returning fragment ids for ownerId=${ownerId}`);
       return fragments;
     } catch (err) {
       logger.error('Error retrieving fragments by user:', err);
