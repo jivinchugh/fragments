@@ -19,6 +19,7 @@ const passport = require('passport');
 const authenticate = require('./auth');
 // Use gzip/deflate compression middleware
 app.use(compression());
+app.use(express.json());
 // Set up our passport authentication middleware
 passport.use(authenticate.strategy());
 app.use(passport.initialize());
@@ -36,6 +37,55 @@ app.use(cors());
 app.use(compression());
 
 app.use('/', require('./routes'));
+
+app.get('/error', (req, res, next) => {
+  // Simulate an internal server error
+  next(new Error('Internal server error'));
+});
+
+app.get('/bad-request', (req, res) => {
+  res.status(400).json({
+    status: 'error',
+    error: {
+      message: 'Bad Request',
+      code: 400,
+    },
+  });
+});
+
+app.get('/error-without-message', (req, res, next) => {
+  const error = new Error();
+  error.status = 503; // Simulate a server error with a specific status
+  next(error);
+});
+
+// Simulate unauthorized access
+app.get('/private-route', (req, res) => {
+  // Here you might normally check for authentication
+  res.status(401).json({
+    status: 'error',
+    error: {
+      message: 'Unauthorized access',
+      code: 401,
+    },
+  });
+});
+
+// Handle valid and invalid POST data
+app.post('/data-route', (req, res) => {
+  const { key } = req.body;
+  if (key === 'validData') {
+    res.status(200).json({ message: 'Data is valid' });
+  } else {
+    res.status(400).json({
+      status: 'error',
+      error: {
+        message: 'Invalid data',
+        code: 400,
+      },
+    });
+  }
+});
 
 // Add 404 middleware to handle any requests for resources that can't be found
 app.use((req, res) => {
