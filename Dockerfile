@@ -43,9 +43,9 @@ COPY ./src ./src
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
 # We run our service on port 8080
-EXPOSE 8080
+EXPOSE ${PORT}
 CMD ["npm", "start"]
 
 # Define an automated health check
 HEALTHCHECK --interval=20s --timeout=30s --start-period=10s --retries=3 \
-    CMD curl --fail http://localhost:8080 || exit 1
+    CMD curl --fail http://localhost:${PORT} || exit 1
