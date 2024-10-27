@@ -13,10 +13,17 @@ module.exports = async (req, res) => {
   }
 
   const { user: ownerId } = req;
+  const contentType = req.get('Content-Type');
+
+  // Validate the Content-Type for text/* or application/json
+  if (!contentType.startsWith('text/') && contentType !== 'application/json') {
+    logger.warn(`Unsupported content-type: ${contentType}`);
+    return res.status(415).json(createErrorResponse(415, 'Unsupported content-type. Allowed: text/*, application/json'));
+  }
 
   try {
     logger.debug('Attempting to create a new fragment');
-    const fragment = new Fragment({ ownerId, type: req.get('Content-Type') });
+    const fragment = new Fragment({ ownerId, type: contentType });
     await fragment.save();
     await fragment.setData(fragData);
     logger.info(`Fragment metadata and data saved. Owner: ${ownerId}, ID: ${fragment.id}, Size: ${fragment.size} bytes`);
