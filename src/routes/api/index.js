@@ -28,5 +28,6 @@ router.post('/fragments', rawBody(), require('./post'));
 
 // Define our first route, which will be: GET /v1/fragments
 router.get('/fragments', require('./get'));
+// GET /v1/fragments/:id
 router.get('/fragments/:id', require('./getById'));
 module.exports = router;
