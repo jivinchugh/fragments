@@ -16,9 +16,7 @@ module.exports = async (req, res) => {
     // Log the number of fragments found
     logger.info(`Found ${fragments.length} fragments for user ${ownerId}`);
     // Send the fragments back in the response
-    res.status(200).json(
-      createSuccessResponse({ fragments: [...fragments] })
-    );
+    res.status(200).json(createSuccessResponse({ fragments: [...fragments] }));
     logger.info(`Successfully fetched fragments for user ${ownerId}`);
   } catch (error) {
     logger.error(`Error occurred while fetching fragments for user ${ownerId}: ${error.message}`);
