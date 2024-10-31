@@ -4,6 +4,8 @@ const { randomUUID } = require('crypto');
 // Use https://www.npmjs.com/package/content-type to create/parse Content-Type headers
 const contentType = require('content-type');
 const logger = require('../logger');
+const md = require('markdown-it')();
+var mime = require('mime-types');
 // Functions for working with fragment metadata/data using our DB
 const {
   readFragment,
@@ -189,8 +191,19 @@ class Fragment {
    */
   get formats() {
     // Retrieves formats for the fragment
-    logger.debug(`Returning supported formats for fragment with id=${this.id}`);
-    return ['text/plain'];
+    if (this.mimeType === 'text/plain') {
+      return ['text/plain'];
+    } else if (this.mimeType === 'text/markdown') {
+      return ['text/plain', 'text/markdown', 'text/html'];
+    } else if (this.mimeType === 'text/html') {
+      return ['text/plain', 'text/html'];
+    } else if (this.mimeType === 'application/json') {
+      return ['text/plain', 'application/json'];
+    } else if (this.mimeType === 'text/csv') {
+      return ['text/plain', 'text/csv', 'application/json'];
+    } else {
+      return [];
+    }
   }
 
   /**
@@ -199,11 +212,33 @@ class Fragment {
    * @returns {boolean} true if we support this Content-Type (i.e., type/subtype)
    */
   static isSupportedType(value) {
-    const SupportedType = ['text/plain', 'text/plain; charset=utf-8'];
     const { type } = contentType.parse(value);
+    const SupportedType = ['text/plain',
+      'text/plain; charset=utf-8',
+      'text/markdown',
+      'text/html',
+      'text/csv',
+      'application/json'];
     const isSupported = SupportedType.includes(type);
     logger.debug(`Content type ${type} is supported: ${isSupported}`);
     return isSupported;
+  }
+
+  async convertType(data, ext) {
+    let desiredType = mime.lookup(ext) || ext;;
+    const availableFormats = this.formats;
+    if (!availableFormats.includes(desiredType)) {
+      logger.warn('This type can not be converted');
+      return { convertedData: null, convertedType: null };
+    }
+    let convertedData = data;
+    if (this.mimeType !== desiredType) {
+      if (this.mimeType === 'text/markdown' && desiredType === 'text/html') {
+        convertedData = md.render(data.toString());
+        convertedData = Buffer.from(convertedData);
+      }
+    }
+    return { convertedData, convertedType: desiredType };
   }
 }
 
