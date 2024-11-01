@@ -33,7 +33,7 @@ router.get('/fragments', require('./get'));
 // GET /v1/fragments/:id.ext
 router.get('/fragments/:id.:ext', require('./getById'));
 router.put('/fragments/:id.:ext', rawBody(), require('./put'));
-// GET /v1/fragments/:id
+// GET /v1/fragments/:id 
 router.get('/fragments/:id', require('./getById'));
 // GET /v1/fragments/:id/info
 router.get('/fragments/:id/info', require('./getById'));
