@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       // Return the converted fragment data
       logger.info(`Successfully converted and fetched fragment: ${id}`);
       res.set('Content-Type', convertedType);
-      return res.status(200).json(createSuccessResponse(convertedData));
+      return res.status(200).json(createSuccessResponse({ content: convertedData }));
     }
 
     logger.info(`Successfully fetched fragment: ${JSON.stringify(fragment)}`);
