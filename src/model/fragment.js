@@ -235,7 +235,6 @@ class Fragment {
     if (this.mimeType !== desiredType) {
       if (this.mimeType === 'text/markdown' && desiredType === 'text/html') {
         convertedData = md.render(data.toString());
-        convertedData = Buffer.from(convertedData);
       }
     }
     return { convertedData, convertedType: desiredType };
