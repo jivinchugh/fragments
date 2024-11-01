@@ -32,6 +32,7 @@ router.post('/fragments', rawBody(), require('./post'));
 router.get('/fragments', require('./get'));
 // GET /v1/fragments/:id.ext
 router.get('/fragments/:id.:ext', require('./getById'));
+// PUT /v1/fragments/:id.newExt
 router.put('/fragments/:id.:ext', rawBody(), require('./put'));
 // GET /v1/fragments/:id 
 router.get('/fragments/:id', require('./getById'));
