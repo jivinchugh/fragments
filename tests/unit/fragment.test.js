@@ -254,4 +254,51 @@ describe('Fragment class', () => {
       expect(() => Fragment.byId('1234', fragment.id)).rejects.toThrow();
     });
   });
+  describe('convertType()', () => {
+    test('converts text/markdown to text/html', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'text/markdown', size: 0 });
+      const data = Buffer.from('# Hello World');
+      const { convertedData, convertedType } = await fragment.convertType(data, 'html');
+      expect(convertedType).toBe('text/html');
+      expect(convertedData).toBe('<h1>Hello World</h1>\n');
+    });
+
+    test('returns null for unsupported conversion', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'text/markdown', size: 0 });
+      const data = Buffer.from('# Hello World');
+      const { convertedData, convertedType } = await fragment.convertType(data, 'xml');
+      expect(convertedData).toBeNull();
+      expect(convertedType).toBeNull();
+    });
+
+    test('returns same data for same type conversion', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'text/plain', size: 0 });
+      const data = Buffer.from('Hello World');
+      const { convertedData, convertedType } = await fragment.convertType(data, 'txt');
+      expect(convertedType).toBe('text/plain');
+      expect(convertedData).toEqual(data);
+    });
+  });
+
+  describe('formats getter', () => {
+    test('returns correct formats for text/markdown', () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'text/markdown', size: 0 });
+      expect(fragment.formats).toEqual(['text/plain', 'text/markdown', 'text/html']);
+    });
+
+    test('returns correct formats for text/html', () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'text/html', size: 0 });
+      expect(fragment.formats).toEqual(['text/plain', 'text/html']);
+    });
+
+    test('returns correct formats for application/json', () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'application/json', size: 0 });
+      expect(fragment.formats).toEqual(['text/plain', 'application/json']);
+    });
+
+    test('returns correct formats for text/csv', () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'text/csv', size: 0 });
+      expect(fragment.formats).toEqual(['text/plain', 'text/csv', 'application/json']);
+    });
+  });
 });
