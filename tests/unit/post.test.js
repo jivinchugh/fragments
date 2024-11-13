@@ -2,7 +2,6 @@ const request = require('supertest');
 const app = require('../../src/app');
 
 describe('POST /v1/fragments', () => {
-  // Authentication Tests
   describe('Authentication', () => {
     test('unauthenticated requests are denied', () => {
       return request(app)
@@ -25,7 +24,7 @@ describe('POST /v1/fragments', () => {
     });
   });
 
-  // Content Type Tests
+  // Content Type Tests updated to match supported types
   describe('Content Type Validation', () => {
     test('missing Content-Type header returns 415', async () => {
       const res = await request(app)
@@ -36,26 +35,34 @@ describe('POST /v1/fragments', () => {
       expect(res.status).toBe(415);
     });
 
+    // Test all supported content types
     test.each([
       ['text/plain', 'Hello World'],
       ['text/markdown', '# Header'],
       ['text/html', '<p>Hello</p>'],
       ['text/csv', 'name,age\njohn,30'],
       ['application/json', { key: 'value' }],
+      ['image/png', Buffer.from('fake-png-data')],
+      ['image/jpeg', Buffer.from('fake-jpeg-data')],
+      ['image/gif', Buffer.from('fake-gif-data')],
+      ['image/webp', Buffer.from('fake-webp-data')],
+      ['image/avif', Buffer.from('fake-avif-data')],
+      ['application/yaml', 'key: value'],
     ])('supports %s content type', async (contentType, data) => {
       const res = await request(app)
         .post('/v1/fragments')
         .auth('user1@email.com', 'password1')
         .set('Content-Type', contentType)
-        .send(contentType === 'application/json' ? data : JSON.stringify(data));
+        .send(contentType === 'application/json' ? data :
+          Buffer.isBuffer(data) ? data :
+            JSON.stringify(data));
 
       expect(res.status).toBe(201);
       expect(res.body.fragment.type).toBe(contentType);
     });
 
+    // Test unsupported content types
     test.each([
-      'image/png',
-      'image/jpeg',
       'audio/mpeg',
       'video/mp4',
       'application/pdf',
@@ -70,6 +77,44 @@ describe('POST /v1/fragments', () => {
       expect(res.status).toBe(415);
       expect(res.body.error.code).toBe(415);
       expect(res.body.error.message).toBe('The content format for fragment (supplied by client) is not supported!!');
+    });
+  });
+
+  // Extended Data Handling Tests
+  describe('Data Handling', () => {
+    test('handles empty content correctly', async () => {
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'text/plain')
+        .send('');
+
+      expect(res.status).toBe(201);
+      expect(res.body.fragment.size).toBe(0);
+    });
+
+    test('handles large content correctly', async () => {
+      const largeContent = 'x'.repeat(1024 * 1024); // 1MB of data
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'text/plain')
+        .send(largeContent);
+
+      expect(res.status).toBe(201);
+      expect(res.body.fragment.size).toBe(largeContent.length);
+    });
+
+    test('size property matches actual content length', async () => {
+      const content = 'Hello, World!';
+      const res = await request(app)
+        .post('/v1/fragments')
+        .auth('user1@email.com', 'password1')
+        .set('Content-Type', 'text/plain')
+        .send(content);
+
+      expect(res.status).toBe(201);
+      expect(res.body.fragment.size).toBe(content.length);
     });
   });
 
@@ -180,4 +225,5 @@ describe('POST /v1/fragments', () => {
       require('../../src/model/fragment').Fragment.prototype.save = originalSave;
     });
   });
+
 });
