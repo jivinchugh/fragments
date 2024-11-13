@@ -198,11 +198,15 @@ class Fragment {
     } else if (this.mimeType === 'text/html') {
       return ['text/plain', 'text/html'];
     } else if (this.mimeType === 'application/json') {
-      return ['text/plain', 'application/json'];
+      return ['text/plain', 'application/json', 'application/yaml', 'application/yml'];
     } else if (this.mimeType === 'text/csv') {
       return ['text/plain', 'text/csv', 'application/json'];
+    } else if (this.mimeType === 'application/yaml') {
+      return ['text/plain', 'application/yaml'];
+    } else if (this.mimeType === 'image/png' || this.mimeType === 'image/jpeg' || this.mimeType === 'image/webp' || this.mimeType === 'image/avif' || this.mimeType === 'image/gif') {
+      return ['image/png', 'image/jpeg', 'image/webp', 'image/avif', 'image/gif'];
     } else {
-      return [];
+      return []; //return empty array to handle unsupported MIME types
     }
   }
 
@@ -213,12 +217,19 @@ class Fragment {
    */
   static isSupportedType(value) {
     const { type } = contentType.parse(value);
-    const SupportedType = ['text/plain',
+    const SupportedType = [
+      'text/plain',
       'text/plain; charset=utf-8',
       'text/markdown',
       'text/html',
       'text/csv',
-      'application/json'];
+      'application/json',
+      'application/yaml',
+      'image/png',
+      'image/jpeg',
+      'image/webp',
+      'image/avif',
+      'image/gif'];
     const isSupported = SupportedType.includes(type);
     logger.debug(`Content type ${type} is supported: ${isSupported}`);
     return isSupported;
