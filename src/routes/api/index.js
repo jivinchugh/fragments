@@ -34,10 +34,10 @@ router.get('/fragments', require('./get'));
 router.get('/fragments/:id.:ext', require('./getById'));
 // PUT /v1/fragments/:id.newExt
 router.put('/fragments/:id.:ext', rawBody(), require('./put'));
+// GET /v1/fragments/:id/info
+router.get('/fragments/:id/info', require('./getByInfo'));
 // GET /v1/fragments/:id 
 router.get('/fragments/:id', require('./getById'));
-// GET /v1/fragments/:id/info
-router.get('/fragments/:id/info', require('./getById'));
 // DELETE /v1/fragments/:id
 router.delete('/fragments/:id', require('./delete'));
 module.exports = router;
