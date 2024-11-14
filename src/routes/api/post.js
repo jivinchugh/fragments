@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
   logger.info(`Received POST request from user ${req.user}`);
   const { user: ownerId } = req;
   const contentType = req.get('Content-Type');
-  const fragData = contentType === 'text/plain' || contentType === 'text/markdown' || contentType === 'text/html' || contentType === 'text/csv' ? req.body : JSON.stringify(req.body);
+  const fragData = contentType === 'text/plain' || contentType === 'text/plain; charset=utf-8' || contentType === 'text/markdown' || contentType === 'text/html' || contentType === 'text/csv' ? req.body : JSON.stringify(req.body);
 
   /*if (!Buffer.isBuffer(fragData)) {
     logger.warn('Unsupported content format. Expected Buffer.');

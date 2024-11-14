@@ -195,6 +195,8 @@ class Fragment {
       return ['text/plain'];
     } else if (this.mimeType === 'text/markdown') {
       return ['text/plain', 'text/markdown', 'text/html'];
+    } else if (this.mimeType === 'text/plain; charset=utf-8') {
+      return ['text/plain; charset=utf-8'];
     } else if (this.mimeType === 'text/html') {
       return ['text/plain', 'text/html'];
     } else if (this.mimeType === 'application/json') {
