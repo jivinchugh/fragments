@@ -9,7 +9,7 @@ user1@email.com:password1
 # Body of the request goes in ```...``` when it's a string
 `This is a fragment!`
 
-# We expect to get back an HTTP 201
+# 1. We expect to get back an HTTP 201
 HTTP/1.1 201
 # We have various assertions about the response that we want to check
 [Asserts]
@@ -37,7 +37,8 @@ GET {{url}}
 user1@email.com:password1
 
 HTTP/1.1 200
-Content-Type: text/plain
-Content-Length: 19
+Content-Type: application/json; charset=utf-8
 [Asserts]
-body == "This is a fragment!"
+jsonpath "$.status" == "ok"
+jsonpath "$.fragment.type" == "text/plain"
+jsonpath "$.fragment.size" == 19
