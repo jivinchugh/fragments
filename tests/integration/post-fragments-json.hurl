@@ -1,11 +1,18 @@
-# post-fragments-json.hurl
+# Authenticated POST to /v1/fragments with JSON data
 POST http://localhost:8080/v1/fragments
+# We're sending a JSON fragment
 Content-Type: application/json
+# Include HTTP Basic Auth credentials
 [BasicAuth]
 user1@email.com:password1
-{"name":"Test User","email":"test@email.com"}
+# Body of the request is a JSON object
+{
+    "name": "Sample",
+    "value": 123,
+    "active": true
+}
 
-
+# We expect to get back an HTTP 201
 HTTP/1.1 201
 [Asserts]
 header "Location" matches "^http:\/\/localhost:8080\/v1\/fragments\/[A-Za-z0-9_-]+$"
@@ -15,18 +22,21 @@ jsonpath "$.fragment.ownerId" matches "^[0-9a-fA-F]+$"
 jsonpath "$.fragment.created" isString
 jsonpath "$.fragment.updated" isString
 jsonpath "$.fragment.type" == "application/json"
-jsonpath "$.fragment.size" == 45
+# The size should match our JSON data
+jsonpath "$.fragment.size" == 43
 
+# Capture the Location URL into a variable named `url`
 [Captures]
 url: header "Location"
 
+# Try to GET the fragment we just posted by its URL
 GET {{url}}
 [BasicAuth]
 user1@email.com:password1
 
 HTTP/1.1 200
-Content-Type: application/json; charset=utf-8
+Content-Type: application/json
 [Asserts]
-jsonpath "$.status" == "ok"
-jsonpath "$.fragment.type" == "application/json"
-jsonpath "$.fragment.size" == 45
+jsonpath "$.name" == "Sample"
+jsonpath "$.value" == 123
+jsonpath "$.active" == true
