@@ -251,7 +251,10 @@ describe('Fragment class', () => {
       await fragment.setData(Buffer.from('a'));
 
       await Fragment.delete('1234', fragment.id);
-      expect(() => Fragment.byId('1234', fragment.id)).rejects.toThrow();
+
+      // Updated test to check that byId returns null after deletion
+      const deletedFragment = await Fragment.byId('1234', fragment.id);
+      expect(deletedFragment).toBeNull();
     });
   });
   describe('convertType()', () => {

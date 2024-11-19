@@ -77,12 +77,23 @@ class Fragment {
   static async byId(ownerId, id) {
     logger.info(`Fetching fragment by id=${id} for ownerId=${ownerId}`);
     try {
+      // Use readFragment to get the fragment metadata
       const fragment = await readFragment(ownerId, id);
-      logger.debug(`Fragment found with id=${id} for ownerId=${ownerId}`);
+      // If no fragment is found, return null explicitly
+      if (!fragment) {
+        logger.warn(`No fragment found with id=${id} for ownerId=${ownerId}`);
+        return null;
+      }
+      // Create and return a new Fragment instance
       return new Fragment(fragment);
     } catch (error) {
-      logger.error('unable to find fragment by that id', error);
-      throw new Error('unable to find fragment by that id');
+      logger.error(`Error finding fragment with id=${id}: ${error.message}`, { error });
+      // If it's a "not found" error, return null
+      if (error.message === 'fragment not found') {
+        return null;
+      }
+      // For other errors, rethrow
+      throw error;
     }
   }
 
@@ -135,7 +146,12 @@ class Fragment {
       })
       .catch((error) => {
         logger.error(`Error retrieving data for fragment with id=${this.id} for ownerId=${this.ownerId}: ${error.message}`);
-        throw new Error('unable to get data');
+        // If it's a "not found" error, throw a specific error that can be translated to 404
+        if (error.message === 'fragment not found' || error.message === 'unable to read fragment data') {
+          throw new Error('Fragment not found');
+        }
+        // For other errors, rethrow
+        throw error;
       });
   }
 
