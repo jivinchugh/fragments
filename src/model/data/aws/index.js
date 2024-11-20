@@ -21,7 +21,6 @@ function writeFragment(fragment) {
 }
 
 // Read a fragment's metadata from memory db
-// Read a fragment's metadata from memory db
 async function readFragment(ownerId, id) {
   try {
     const fragment = await metadata.get(ownerId, id);
@@ -49,6 +48,8 @@ async function writeFragmentData(ownerId, id, data) {
     Key: `${ownerId}/${id}`,
     Body: data,
   };
+  logger.info(`Writing fragment data for ownerId=${ownerId}, id=${id}`);
+  logger.info(`params: ${JSON.stringify(s3Params)}`);
 
   // Create a PUT Object command to send to S3
   const command = new PutObjectCommand(s3Params);
