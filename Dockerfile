@@ -30,7 +30,7 @@ RUN npm ci --only=production
 # Use node version v20.17.0
 FROM node:20.17.0@sha256:a5e0ed56f2c20b9689e0f7dd498cac7e08d2a3a283e92d9304e7b9b83e3c6ff3 AS production
 
-USER node
+#USER node
 WORKDIR /app
 
 # Copy installed dependencies from the build stage
