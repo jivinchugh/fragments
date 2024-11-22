@@ -98,7 +98,6 @@ jobs:
             AWS_COGNITO_POOL_ID=us-east-1_JjVQMU4Kv
             AWS_COGNITO_CLIENT_ID=2o0glumto66u01ddda7jrdaaeh
             AWS_S3_BUCKET_NAME=jchugh-fragments
-            # ...continue the rest here...
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
