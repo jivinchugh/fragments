@@ -36,7 +36,7 @@ jsonpath "$.fragment.size" == 22
 # 4. POST a second Markdown fragment to http://localhost:8080 as the same authorized user. The fragment's body should be the Markdown value, DynamoDB is **great**
 # Authenticated POST to /v1/fragments
 POST http://localhost:8080/v1/fragments
-content-type: text/markdown; charset=utf-8
+content-type: text/markdown
 [BasicAuth]
 user1@email.com:password1
 ```
@@ -61,7 +61,7 @@ jsonpath "$.fragment.id" matches "^[A-Za-z0-9_-]+$"
 jsonpath "$.fragment.ownerId" matches "^[0-9a-fA-F]+$"
 jsonpath "$.fragment.created" isString
 jsonpath "$.fragment.updated" isString
-jsonpath "$.fragment.type" == "text/markdown; charset=utf-8"
+jsonpath "$.fragment.type" == "text/markdown"
 jsonpath "$.fragment.size" == 22
 
 # 7. GET all of the fragments for the same authorized user without expanding them (i.e., just get back the IDs) and confirm that the list of fragments includes the two id values you captured above
