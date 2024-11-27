@@ -9,9 +9,7 @@ user1@email.com:password1
 {"service":"DynamoDB"}
 
 # 2. Confirm that the server returns a 201, and capture the Location header value and the fragment's id in variables named fragment1_url and fragment1_id.
-# We expect to get back an HTTP 201
 HTTP/1.1 201
-# Capture the Location URL into a variable named `url` and 'fragmentID' from 'url'
 [Captures]
 fragment1_url: header "Location"
 fragment1_id: jsonpath "$.fragment.id"
@@ -34,7 +32,6 @@ jsonpath "$.fragment.type" == "application/json"
 jsonpath "$.fragment.size" == 22
 
 # 4. POST a second Markdown fragment to http://localhost:8080 as the same authorized user. The fragment's body should be the Markdown value, DynamoDB is **great**
-# Authenticated POST to /v1/fragments
 POST http://localhost:8080/v1/fragments
 content-type: text/markdown
 [BasicAuth]
@@ -68,7 +65,6 @@ jsonpath "$.fragment.size" == 22
 GET http://localhost:8080/v1/fragments
 [BasicAuth]
 user1@email.com:password1
-
 HTTP/1.1 200
 [Asserts]
 jsonpath "$.fragments" includes "{{fragment1_id}}"
