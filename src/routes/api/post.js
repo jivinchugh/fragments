@@ -1,4 +1,3 @@
-// src/routes/api/post.js
 const { createSuccessResponse, createErrorResponse } = require('../../response');
 const { Fragment } = require('../../model/fragment');
 const logger = require('../../logger');
@@ -7,12 +6,6 @@ module.exports = async (req, res) => {
   logger.info(`Received POST request from user ${req.user}`);
   const { user: ownerId } = req;
   const contentType = req.get('Content-Type');
-  const fragData = contentType === 'text/plain' || contentType === 'text/plain; charset=utf-8' || contentType === 'text/markdown' || contentType === 'text/markdown; charset=utf-8' || contentType === 'text/html' || contentType === 'text/csv' ? req.body : JSON.stringify(req.body);
-
-  /*if (!Buffer.isBuffer(fragData)) {
-    logger.warn('Unsupported content format. Expected Buffer.');
-    return res.status(415).json(createErrorResponse(415, 'The content format for fragment (supplied by client) is not supported!!'));
-  }*/
 
   // Check if the Content-Type is supported
   if (!Fragment.isSupportedType(contentType)) {
@@ -21,10 +14,33 @@ module.exports = async (req, res) => {
   }
 
   try {
+    // Handle different content types
+    let fragData;
+    if (contentType.startsWith('image/')) {
+      // For image uploads, decode base64 to buffer
+      fragData = Buffer.from(req.body, 'base64');
+    } else {
+      // For text-based content types
+      fragData = contentType === 'text/plain' ||
+        contentType === 'text/plain; charset=utf-8' ||
+        contentType === 'text/markdown' ||
+        contentType === 'text/markdown; charset=utf-8' ||
+        contentType === 'text/html' ||
+        contentType === 'text/csv'
+        ? req.body
+        : JSON.stringify(req.body);
+    }
+
     logger.debug('Attempting to create a new fragment');
     const fragment = new Fragment({ ownerId, type: contentType });
     await fragment.save();
-    await fragment.setData(Buffer.from(fragData)); // Ensure data is a Buffer
+
+    // Ensure fragData is a Buffer for all content types
+    const dataBuffer = Buffer.isBuffer(fragData)
+      ? fragData
+      : Buffer.from(fragData);
+    await fragment.setData(dataBuffer);
+
     logger.info(`Fragment metadata and data saved. Owner: ${ownerId}, ID: ${fragment.id}, Size: ${fragment.size} bytes`);
 
     const locationURL = `${req.protocol}://${req.headers.host}/v1/fragments/${fragment.id}`;
