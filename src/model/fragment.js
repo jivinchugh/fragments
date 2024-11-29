@@ -6,6 +6,8 @@ const contentType = require('content-type');
 const logger = require('../logger');
 const md = require('markdown-it')();
 var mime = require('mime-types');
+const sharp = require('sharp');
+
 // Functions for working with fragment metadata/data using our DB
 const {
   readFragment,
@@ -261,9 +263,23 @@ class Fragment {
       return { convertedData: null, convertedType: null };
     }
     let convertedData = data;
+    // Ensure data is a Buffer
+    if (!(data instanceof Buffer)) {
+      data = Buffer.from(data);
+    }
     if (this.mimeType !== desiredType) {
       if (this.mimeType === 'text/markdown' && desiredType === 'text/html') {
         convertedData = md.render(data.toString());
+      } else if (desiredType === 'image/jpeg') {
+        convertedData = await sharp(data).jpeg().toBuffer();
+      } else if (desiredType === 'image/png') {
+        convertedData = await sharp(data).png().toBuffer();
+      } else if (desiredType === 'image/webp') {
+        convertedData = await sharp(data).webp().toBuffer();
+      } else if (desiredType === 'image/avif') {
+        convertedData = await sharp(data).avif().toBuffer();
+      } else if (desiredType === 'image/gif') {
+        convertedData = await sharp(data).gif().toBuffer();
       }
     }
     return { convertedData, convertedType: desiredType };
