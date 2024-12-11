@@ -324,4 +324,39 @@ describe('Fragment class', () => {
       expect(Fragment.isSupportedType('application/octet-stream')).toBe(false);
     });
   });
+
+  describe('convertType() image conversions', () => {
+    // Helper function to create a test image buffer
+    const createTestImageBuffer = async (format = 'png') => {
+      const sharp = require('sharp');
+      return sharp({
+        create: {
+          width: 100,
+          height: 100,
+          channels: 4,
+          background: { r: 255, g: 0, b: 0, alpha: 0.5 }
+        }
+      }).toFormat(format).toBuffer();
+    };
+
+    test('handles unsupported image conversion gracefully', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'image/png', size: 0 });
+      const data = await createTestImageBuffer('png');
+      const { convertedData, convertedType } = await fragment.convertType(data, 'tiff');
+
+      expect(convertedData).toBeNull();
+      expect(convertedType).toBeNull();
+    });
+
+    test('handles conversion with error gracefully', async () => {
+      const fragment = new Fragment({ ownerId: '1234', type: 'image/png', size: 0 });
+      // Pass an invalid buffer to simulate conversion error
+      const { convertedData, convertedType } = await fragment.convertType(Buffer.from('invalid'), 'jpg');
+
+      expect(convertedData).toBeNull();
+      expect(convertedType).toBeNull();
+    });
+  });
+
+
 });
