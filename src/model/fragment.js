@@ -262,27 +262,71 @@ class Fragment {
       logger.warn('This type can not be converted');
       return { convertedData: null, convertedType: null };
     }
-    let convertedData = data;
+    let convertedData;
     // Ensure data is a Buffer
-    if (!(data instanceof Buffer)) {
-      data = Buffer.from(data);
+    // if (!(data instanceof Buffer)) {
+    //   data = Buffer.from(data);
+    // }
+
+    // If the desired type is the same as current type, return original data
+    if (this.mimeType === desiredType) {
+      return { convertedData: data, convertedType: desiredType };
     }
-    if (this.mimeType !== desiredType) {
-      if (this.mimeType === 'text/markdown' && desiredType === 'text/html') {
+
+    logger.info(`Converting from ${this.mimeType} to ${desiredType}`);
+    // logger.warn(sharp.format);
+
+    try {
+      // Image conversion logic
+      if (this.mimeType.startsWith('image/') && desiredType.startsWith('image/')) {
+        logger.warn('Image conversion logic');
+        // Remove the console.log that was previously there
+        switch (desiredType) {
+          case 'image/jpeg':
+            logger.warn('-------JPEG conversion');
+            return {
+              convertedData: await sharp(data).toFormat(desiredType).toBuffer(),
+              convertedType: 'image/jpeg'
+            };
+          case 'image/png':
+            logger.warn('-------PNG conversion');
+            return {
+              convertedData: await sharp(data).toFormat(desiredType).toBuffer(),
+              convertedType: 'image/png'
+            };
+          case 'image/webp':
+            return {
+              convertedData: await sharp(data).toFormat(desiredType).toBuffer(),
+              convertedType: 'image/webp'
+            };
+          case 'image/avif':
+            return {
+              convertedData: await sharp(data).toFormat(desiredType).toBuffer(),
+              convertedType: 'image/avif'
+            };
+          case 'image/gif':
+            return {
+              convertedData: await sharp(data).toFormat(desiredType).toBuffer(),
+              convertedType: 'image/gif'
+            };
+          default:
+            logger.warn(`Unsupported image conversion to ${desiredType}`);
+            return { convertedData: null, convertedType: null };
+        }
+      } else if (this.mimeType === 'text/markdown' && desiredType === 'text/html') {
         convertedData = md.render(data.toString());
-      } else if (desiredType === 'image/jpeg') {
-        convertedData = await sharp(data).jpeg().toBuffer();
-      } else if (desiredType === 'image/png') {
-        convertedData = await sharp(data).png().toBuffer();
-      } else if (desiredType === 'image/webp') {
-        convertedData = await sharp(data).webp().toBuffer();
-      } else if (desiredType === 'image/avif') {
-        convertedData = await sharp(data).avif().toBuffer();
-      } else if (desiredType === 'image/gif') {
-        convertedData = await sharp(data).gif().toBuffer();
+        return { convertedData, convertedType: desiredType };
       }
+
+    } catch (error) {
+      logger.error(`Error converting image: ${error.message}`, {
+        error,
+        currentType: this.mimeType,
+        desiredType: desiredType,
+        dataLength: data.length
+      });
+      return { convertedData: null, convertedType: null };
     }
-    return { convertedData, convertedType: desiredType };
   }
 }
 
