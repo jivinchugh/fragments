@@ -17,8 +17,7 @@ module.exports = async (req, res) => {
     // Handle different content types
     let fragData;
     if (contentType.startsWith('image/')) {
-      // For image uploads, decode base64 to buffer
-      fragData = Buffer.from(req.body, 'base64');
+      fragData = Buffer.from(req.body);
     } else {
       // For text-based content types
       fragData = contentType === 'text/plain' ||
