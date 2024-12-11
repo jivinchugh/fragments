@@ -24,7 +24,7 @@ class MemoryDB {
     }
 
     const db = this.db;
-    logger.debug(`THIS IS DB---------------------, ${JSON.stringify(db)}`)
+    //logger.debug(`THIS IS DB---------------------, ${JSON.stringify(db)}`)
     const value = db[primaryKey] && db[primaryKey][secondaryKey];
     if (value) {
       logger.info(`Value found for primaryKey=${primaryKey}, secondaryKey=${secondaryKey}`);
